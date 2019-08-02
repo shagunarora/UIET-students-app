@@ -9,17 +9,21 @@ import {
 import Logo from "../components/Logo";
 
 import { Actions } from "react-native-router-flux";
-
+import * as firebase from "firebase";
 export default class Signup extends Component {
   state = {
     email: "",
     password: "",
     errorMessage: null
   };
-  // handleSignUp = () => {
-  //   //TODO: Firebase stuff
-  //   console.log("handle Signup");
-  // };
+
+  handleSignUp = () => {
+    firebase
+      .auth()
+      .createUserWithEmailAndPassword(this.state.email, this.state.password)
+      .then(() => this.props.navigation.navigate("main"))
+      .catch(error => this.setState({ errorMessage: error.message }));
+  };
 
   login() {
     Actions.login();
@@ -49,7 +53,7 @@ export default class Signup extends Component {
           onChangeText={password => this.setState({ password })}
           value={this.state.password}
         />
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity style={styles.button} onPress={this.handleSignUp}>
           <Text style={styles.buttonText}>Sign Up</Text>
         </TouchableOpacity>
 

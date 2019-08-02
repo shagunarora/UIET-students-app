@@ -7,6 +7,7 @@ import {
   TextInput
 } from "react-native";
 import Logo from "../components/Logo";
+import * as firebase from "firebase";
 
 import { Actions } from "react-native-router-flux";
 
@@ -17,10 +18,13 @@ export default class Login extends Component {
     errorMessage: null
   };
 
-  // handleLogin = () => {
-  //   //firebase work
-  //   console.log("handle login");
-  // };
+  handleLogin = () => {
+    firebase
+      .auth()
+      .signInWithEmailAndPassword(this.state.email, this.state.password)
+      .then(() => this.props.navigation.navigate("main"))
+      .catch(error => this.setState({ errorMessage: error.message }));
+  };
   signup() {
     Actions.signup();
   }
@@ -49,7 +53,7 @@ export default class Login extends Component {
           onChangeText={password => this.setState({ password })}
           value={this.state.password}
         />
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity style={styles.button} onPress={this.handleLogin}>
           <Text style={styles.buttonText}>Login</Text>
         </TouchableOpacity>
 
