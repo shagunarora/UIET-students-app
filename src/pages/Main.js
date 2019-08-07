@@ -1,8 +1,9 @@
 import React from "react";
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import firebase from "firebase";
+
 export default class Main extends React.Component {
-  state = { currentUser: null };
+  state = { currentUser: null, name: "shagun" };
   componentDidMount() {
     const { currentUser } = firebase.auth();
     this.setState({ currentUser });
@@ -13,9 +14,25 @@ export default class Main extends React.Component {
 
   render() {
     const { currentUser } = this.state;
+    console.log(this.state.name);
+    console.log(currentUser && currentUser.email);
+    firebase
+      .firestore()
+      .collection("users")
+      .where("email", "==", currentUser && currentUser.email)
+      .get()
+      .then(querySnapshot => {
+        querySnapshot.forEach(doc => {
+          const name = doc.data().name;
+          console.log(name);
+          this.setState({ name });
+        });
+      });
+
     return (
       <View style={styles.container}>
         <Text>Hi {currentUser && currentUser.email}!</Text>
+        <Text>{this.state.name}</Text>
         <TouchableOpacity style={styles.button} onPress={this.logOutUser}>
           <Text style={styles.buttonText}>Logout</Text>
         </TouchableOpacity>

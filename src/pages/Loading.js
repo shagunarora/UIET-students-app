@@ -3,7 +3,6 @@ import { View, Text, ActivityIndicator, StyleSheet } from "react-native";
 import * as firebase from "firebase";
 
 export default class Loading extends React.Component {
-  state = { loggedIn: null };
   componentWillMount() {
     var firebaseConfig = {
       apiKey: "AIzaSyDFx_wqBPRWE0wDBU7P3X3wSQJprU4pCdQ",
@@ -16,14 +15,7 @@ export default class Loading extends React.Component {
     };
     // Initialize Firebase
     firebase.initializeApp(firebaseConfig);
-    //   firebase.auth().onAuthStateChanged(user => {
-    //     if (user) {
-    //       this.setState({ loggedIn: true });
-    //     } else {
-    //       this.setState({ loggedIn: false });
-    //     }
-    //   });
-    // }
+
     firebase.auth().onAuthStateChanged(user => {
       this.props.navigation.navigate(user ? "main" : "signup");
     });

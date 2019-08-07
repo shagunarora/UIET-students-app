@@ -10,19 +10,39 @@ import Logo from "../components/Logo";
 
 import { Actions } from "react-native-router-flux";
 import * as firebase from "firebase";
+import "firebase/firestore";
+import { YellowBox } from "react-native";
+import _ from "lodash";
+
+YellowBox.ignoreWarnings(["Setting a timer"]);
+const _console = _.clone(console);
+console.warn = message => {
+  if (message.indexOf("Setting a timer") <= -1) {
+    _console.warn(message);
+  }
+};
 export default class Signup extends Component {
   state = {
     email: "",
     password: "",
-    errorMessage: null
+    errorMessage: null,
+    name: ""
   };
 
   handleSignUp = () => {
     firebase
       .auth()
       .createUserWithEmailAndPassword(this.state.email, this.state.password)
-      .then(() => this.props.navigation.navigate("main"))
-      .catch(error => this.setState({ errorMessage: error.message }));
+      .then(() =>
+        firebase
+          .firestore()
+          .collection("users")
+          .add({
+            name: this.state.name,
+            email: this.state.email
+          })
+      )
+      .then(() => this.props.navigation.navigate("main"));
   };
 
   login() {
@@ -44,6 +64,15 @@ export default class Signup extends Component {
           onChangeText={email => this.setState({ email })}
           value={this.state.email}
         />
+        <TextInput
+          style={styles.inputBox}
+          placeholder="Usrname"
+          autoCapitalize="none"
+          placeholderTextColor="#fff"
+          onChangeText={name => this.setState({ name })}
+          value={this.state.name}
+        />
+
         <TextInput
           style={styles.inputBox}
           placeholder="Password"
