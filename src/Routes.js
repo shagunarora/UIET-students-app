@@ -4,6 +4,7 @@ import Login from "/home/shagun/pu/src/pages/Login";
 import Signup from "/home/shagun/pu/src/pages/signup";
 import Loading from "/home/shagun/pu/src/pages/Loading";
 import Main from "/home/shagun/pu/src/pages/Main";
+import Review from "/home/shagun/pu/src/pages/form";
 export default class Routes extends Component {
   render() {
     return (
@@ -17,6 +18,7 @@ export default class Routes extends Component {
             title="loading"
             initial={true}
           />
+          <Scene key="form" component={Review} title="form" />
           <Scene key="main" component={Main} title="main" />
         </Stack>
       </Router>
