@@ -10,7 +10,12 @@ import firebase from "firebase";
 import { Header } from "react-native-elements";
 
 export default class Main extends React.Component {
-  state = { currentUser: null, name: "..." };
+  state = {
+    currentUser: null,
+    name: "...",
+    arrayHolder: [],
+    textInput_Holder: ""
+  };
   componentDidMount() {
     const { currentUser } = firebase.auth();
     this.setState({ currentUser });
@@ -27,6 +32,7 @@ export default class Main extends React.Component {
         });
       });
   }
+
   logOutUser = () => {
     firebase.auth().signOut();
   };

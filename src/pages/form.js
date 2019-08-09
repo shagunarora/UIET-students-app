@@ -7,17 +7,40 @@ import {
   TextInput,
   KeyboardAvoidingView
 } from "react-native";
+import * as firebase from "firebase";
+import "firebase/firestore";
 
 export default class Review extends Component {
   state = {
     title: "",
     detail: "",
     errorMessage: null,
-    contact: ""
+    contact: "",
+    currentUser: null
   };
-
   handleForm = () => {
-    this.props.navigation.navigate("main");
+    const { currentUser } = firebase.auth();
+    this.setState({ currentUser });
+    firebase
+      .firestore()
+      .collection("users")
+      .where("email", "==", currentUser && currentUser.email)
+      .get()
+      .then(querySnapshot => {
+        querySnapshot.forEach(doc => {
+          firebase
+            .firestore()
+            .collection("users")
+            .doc(doc.id)
+            .collection("cards")
+            .add({
+              title: this.state.title,
+              detail: this.state.detail,
+              contact: this.state.contact
+            });
+        });
+      })
+      .then(() => this.props.navigation.navigate("main"));
   };
 
   render() {
@@ -46,6 +69,7 @@ export default class Review extends Component {
           onChangeText={title => this.setState({ title })}
           value={this.state.title}
           autoCorrect={false}
+          multiline={true}
         />
         <TextInput
           style={styles.inputBoxDetail}
@@ -65,6 +89,7 @@ export default class Review extends Component {
           onChangeText={contact => this.setState({ contact })}
           value={this.state.contact}
           autoCorrect={false}
+          multiline={true}
         />
         <TouchableOpacity style={styles.button} onPress={this.handleForm}>
           <Text style={styles.buttonText}>Submit</Text>
