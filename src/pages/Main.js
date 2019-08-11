@@ -4,18 +4,15 @@ import {
   Text,
   View,
   TouchableOpacity,
-  FlatList
+  ActivityIndicator
 } from "react-native";
 import firebase from "firebase";
 import { Header } from "react-native-elements";
+import RightComponent from "/home/shagun/pu/src/pages/rightComponent";
 
 export default class Main extends React.Component {
-  state = {
-    currentUser: null,
-    name: "...",
-    arrayHolder: [],
-    textInput_Holder: ""
-  };
+  state = { currentUser: null, name: "...", email: "" };
+
   componentDidMount() {
     const { currentUser } = firebase.auth();
     this.setState({ currentUser });
@@ -27,17 +24,16 @@ export default class Main extends React.Component {
       .then(querySnapshot => {
         querySnapshot.forEach(doc => {
           const name = doc.data().name;
+          const email = doc.data().email;
           console.log(name);
           this.setState({ name });
+          this.setState({ email });
         });
       });
   }
 
-  logOutUser = () => {
-    firebase.auth().signOut();
-  };
   overlay = () => {
-    this.props.navigation.navigate("form");
+    this.props.navigation.push("form", { email: this.state.email });
   };
 
   render() {
@@ -50,6 +46,7 @@ export default class Main extends React.Component {
 
             style: { color: "#fff", fontSize: 17, fontWeight: "bold" }
           }}
+          rightComponent={<RightComponent />}
           containerStyle={{
             backgroundColor: "rgba(13,71,161,0.9)",
             justifyContent: "center"
@@ -57,9 +54,6 @@ export default class Main extends React.Component {
         />
         <TouchableOpacity style={styles.button} onPress={this.overlay}>
           <Text style={styles.buttonText}>AddPost</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={this.logOutUser}>
-          <Text style={styles.buttonText}>Logout</Text>
         </TouchableOpacity>
       </View>
     );

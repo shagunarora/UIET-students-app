@@ -5,58 +5,82 @@ import {
   StyleSheet,
   TouchableOpacity,
   TextInput,
-  KeyboardAvoidingView
+  KeyboardAvoidingView,
+  ActivityIndicator
 } from "react-native";
 import * as firebase from "firebase";
 import "firebase/firestore";
+import Fire from "../Fire";
+import { Icon } from "react-native-elements";
 
 export default class Review extends Component {
-  state = {
-    title: "",
-    detail: "",
-    errorMessage: null,
-    contact: "",
-    currentUser: null
-  };
-  handleForm = () => {
-    const { currentUser } = firebase.auth();
-    this.setState({ currentUser });
-    firebase
-      .firestore()
-      .collection("users")
-      .where("email", "==", currentUser && currentUser.email)
-      .get()
-      .then(querySnapshot => {
-        querySnapshot.forEach(doc => {
-          firebase
-            .firestore()
-            .collection("users")
-            .doc(doc.id)
-            .collection("cards")
-            .add({
-              title: this.state.title,
-              detail: this.state.detail,
-              contact: this.state.contact
+  constructor() {
+    super();
+    this.ref = firebase.firestore().collection("users");
+    this.state = {
+      title: "",
+      detail: "",
+      contact: ""
+    };
+  }
+
+  static navigationOptions = ({ navigation }) => ({
+    title: "Create Post",
+    headerStyle: {
+      backgroundColor: "rgba(13,71,161,0.9)"
+    },
+    headerTintColor: "#fff",
+    headerTitleStyle: {
+      fontWeight: "bold"
+    },
+    headerRight: (
+      <Icon
+        raised
+        size={17}
+        name="md-share-alt"
+        type="ionicon"
+        color="rgba(13,71,161,0.9)"
+        onPress={() => {
+          const title = navigation.getParam("title");
+          const detail = navigation.getParam("detail");
+          const contact = navigation.getParam("contact");
+          const email = navigation.getParam("email");
+          if (title && detail && contact) {
+            navigation.goBack();
+            Fire.shared.post({
+              title: title.trim(),
+              detail: detail.trim(),
+              contact: contact.trim(),
+              email: email
             });
-        });
-      })
-      .then(() => this.props.navigation.navigate("main"));
-  };
+          } else {
+            alert("You can't leave a field blank");
+          }
+        }}
+      />
+    )
+    // headerRight: (
+    //   <HeaderButtons IconComponent={Ionicons} iconSize={23} color="black">
+    //     <HeaderButtons.Item
+    //       title="Share"
+    //       onPress={() => {
+    //         const text = navigation.getParam("text");
+    //         const image = navigation.getParam("image");
+    //         if (text && image) {
+    //           navigation.goBack();
+    //           Fire.shared.post({ text: text.trim(), image });
+    //         } else {
+    //           alert("Need valid description");
+    //         }
+    //       }}
+    //     />
+    //   </HeaderButtons>
+    // )
+  });
 
   render() {
     return (
       <KeyboardAvoidingView style={styles.container} behavior="padding">
-        <Text
-          style={{
-            alignContent: "center",
-            fontSize: 30,
-            fontWeight: "bold",
-            marginBottom: 10,
-            color: "rgba(13,71,161,0.9)"
-          }}
-        >
-          ADD POST
-        </Text>
         {this.state.errorMessage && (
           <Text style={{ color: "red" }}>{this.state.errorMessage}</Text>
         )}
@@ -66,7 +90,10 @@ export default class Review extends Component {
           placeholder="Title"
           autoCapitalize="none"
           placeholderTextColor="#fff"
-          onChangeText={title => this.setState({ title })}
+          onChangeText={title => {
+            this.setState({ title });
+            this.props.navigation.setParams({ title });
+          }}
           value={this.state.title}
           autoCorrect={false}
           multiline={true}
@@ -77,7 +104,10 @@ export default class Review extends Component {
           placeholder="description"
           autoCapitalize="none"
           placeholderTextColor="#fff"
-          onChangeText={detail => this.setState({ detail })}
+          onChangeText={detail => {
+            this.setState({ detail });
+            this.props.navigation.setParams({ detail });
+          }}
           value={this.state.detail}
           autoCorrect={false}
         />
@@ -86,14 +116,14 @@ export default class Review extends Component {
           placeholder="contact"
           autoCapitalize="none"
           placeholderTextColor="#fff"
-          onChangeText={contact => this.setState({ contact })}
+          onChangeText={contact => {
+            this.setState({ contact });
+            this.props.navigation.setParams({ contact });
+          }}
           value={this.state.contact}
           autoCorrect={false}
           multiline={true}
         />
-        <TouchableOpacity style={styles.button} onPress={this.handleForm}>
-          <Text style={styles.buttonText}>Submit</Text>
-        </TouchableOpacity>
       </KeyboardAvoidingView>
     );
   }
@@ -102,10 +132,12 @@ export default class Review extends Component {
 const styles = StyleSheet.create({
   container: {
     alignItems: "center",
-    justifyContent: "center",
+
     backgroundColor: "white",
 
-    flex: 1
+    flex: 1,
+
+    paddingTop: 30
   },
 
   inputBox: {
@@ -113,7 +145,7 @@ const styles = StyleSheet.create({
     height: 50,
     backgroundColor: "rgba(13,71,161,0.5)",
     borderRadius: 20,
-    marginBottom: 15,
+    marginBottom: 25,
     paddingHorizontal: 25,
     fontSize: 15,
     color: "#fff"
@@ -123,7 +155,7 @@ const styles = StyleSheet.create({
     height: 150,
     backgroundColor: "rgba(13,71,161,0.5)",
     borderRadius: 25,
-    marginBottom: 15,
+    marginBottom: 25,
     paddingHorizontal: 25,
     fontSize: 15,
     color: "#fff"

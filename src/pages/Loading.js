@@ -3,7 +3,7 @@ import { View, Text, ActivityIndicator, StyleSheet } from "react-native";
 import * as firebase from "firebase";
 
 export default class Loading extends React.Component {
-  componentWillMount() {
+  componentDidMount() {
     var firebaseConfig = {
       apiKey: "AIzaSyDFx_wqBPRWE0wDBU7P3X3wSQJprU4pCdQ",
       authDomain: "uiet-students-app.firebaseapp.com",
