@@ -7,7 +7,7 @@ export default class Logo extends Component {
       <View style={styles.container}>
         <Image
           style={{ width: 140, height: 140 }}
-          source={require("/home/shagun/pu/src/images/uiet.png")}
+          source={require("/home/shagun/UIET-students-app/src/images/uiet.png")}
         />
 
         <Text style={styles.logoText}>
