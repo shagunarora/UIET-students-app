@@ -1,7 +1,7 @@
 import React, { Component } from "react";
-import { View, StyleSheet, Text } from "react-native";
+import { View, StyleSheet } from "react-native";
 
-import Routes from "/home/shagun/pu/src/Routes";
+import Routes from "/home/shagun/UIET-students-app/src/Routes";
 
 export default class App1 extends Component {
   render() {

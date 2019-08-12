@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import firebase from "firebase";
 import { Header } from "react-native-elements";
-import RightComponent from "/home/shagun/pu/src/pages/rightComponent";
+import RightComponent from "/home/shagun/UIET-students-app/src/pages/rightComponent";
 
 export default class Main extends React.Component {
   state = { currentUser: null, name: "...", email: "" };

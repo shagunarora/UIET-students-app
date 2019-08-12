@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import { Router, Stack, Scene } from "react-native-router-flux";
-import Login from "/home/shagun/pu/src/pages/Login";
-import Signup from "/home/shagun/pu/src/pages/signup";
-import Loading from "/home/shagun/pu/src/pages/Loading";
-import Main from "/home/shagun/pu/src/pages/Main";
-import Review from "/home/shagun/pu/src/pages/form";
+import Login from "/home/shagun/UIET-students-app/src/pages/Login";
+import Signup from "/home/shagun/UIET-students-app/src/pages/signup";
+import Loading from "/home/shagun/UIET-students-app/src/pages/Loading";
+import Main from "/home/shagun/UIET-students-app/src/pages/Main";
+import Review from "/home/shagun/UIET-students-app/src/pages/form";
 export default class Routes extends Component {
   render() {
     return (
