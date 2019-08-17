@@ -1,12 +1,9 @@
 import React, { Component } from "react";
 import {
   Text,
-  View,
   StyleSheet,
-  TouchableOpacity,
   TextInput,
-  KeyboardAvoidingView,
-  ActivityIndicator
+  KeyboardAvoidingView
 } from "react-native";
 import * as firebase from "firebase";
 import "firebase/firestore";
@@ -59,23 +56,6 @@ export default class Review extends Component {
         }}
       />
     )
-    // headerRight: (
-    //   <HeaderButtons IconComponent={Ionicons} iconSize={23} color="black">
-    //     <HeaderButtons.Item
-    //       title="Share"
-    //       onPress={() => {
-    //         const text = navigation.getParam("text");
-    //         const image = navigation.getParam("image");
-    //         if (text && image) {
-    //           navigation.goBack();
-    //           Fire.shared.post({ text: text.trim(), image });
-    //         } else {
-    //           alert("Need valid description");
-    //         }
-    //       }}
-    //     />
-    //   </HeaderButtons>
-    // )
   });
 
   render() {
