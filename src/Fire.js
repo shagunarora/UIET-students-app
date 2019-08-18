@@ -44,6 +44,37 @@ class Fire {
       alert(message);
     }
   };
+  getMyPage = async () => {
+    const { currentUser } = firebase.auth();
+
+    let ref = this.collection.where(
+      "email",
+      "==",
+      currentUser && currentUser.email
+    );
+    try {
+      const querySnapshot = await ref.get();
+      if (querySnapshot) {
+        const data = [];
+        querySnapshot.forEach(doc => {
+          if (doc.exists) {
+            const post = doc.data();
+            const reduced = {
+              key: doc.id,
+
+              ...post
+            };
+            data.push(reduced);
+          }
+        });
+        return { data };
+      } else {
+        return 0;
+      }
+    } catch ({ message }) {
+      alert(message);
+    }
+  };
 
   get collection() {
     return firebase.firestore().collection(collectionName);

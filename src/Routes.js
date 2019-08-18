@@ -5,6 +5,7 @@ import Signup from "/home/shagun/UIET-students-app/src/pages/signup";
 import Loading from "/home/shagun/UIET-students-app/src/pages/Loading";
 import Main from "/home/shagun/UIET-students-app/src/pages/Main";
 import Review from "/home/shagun/UIET-students-app/src/pages/form";
+import Posts from "/home/shagun/UIET-students-app/src/pages/myPost";
 export default class Routes extends Component {
   render() {
     return (
@@ -19,6 +20,7 @@ export default class Routes extends Component {
             initial={true}
           />
           <Scene key="form" component={Review} title="form" />
+          <Scene key="myPost" component={Posts} title="myPost" />
           <Scene key="main" component={Main} title="main" />
         </Stack>
       </Router>

@@ -5,14 +5,14 @@ import {
   View,
   TouchableOpacity,
   FlatList,
-  RefreshControl
+  RefreshControl,
+  Dimensions
 } from "react-native";
 import firebase from "firebase";
 import RightComponent from "/home/shagun/UIET-students-app/src/pages/rightComponent";
-import { Header } from "react-native-elements";
+import { Header, Divider } from "react-native-elements";
 import { Card } from "react-native-elements";
 import Fire from "../Fire";
-import { Dimensions } from "react-native";
 
 const PAGE_SIZE = 4;
 export default class Main extends React.Component {
@@ -80,12 +80,17 @@ export default class Main extends React.Component {
   overlay = () => {
     this.props.navigation.push("form", { email: this.state.email });
   };
+  myPost = () => {
+    this.props.navigation.push("myPost", { email: this.state.email });
+  };
   renderRow({ item }) {
     return (
-      <Card containerStyle={styles.card} title={item.title}>
-        <Text style={styles.detail}>{item.detail}</Text>
-        <Text style={styles.contact}>{item.contact}</Text>
-      </Card>
+      <View style={{ marginBottom: 20 }}>
+        <Card containerStyle={styles.card} title={item.title}>
+          <Text style={styles.detail}>{item.detail}</Text>
+          <Text style={styles.contact}>{item.contact}</Text>
+        </Card>
+      </View>
     );
   }
   _onRefresh = () => this.makeRemoteRequest();
@@ -120,10 +125,14 @@ export default class Main extends React.Component {
           renderItem={this.renderRow}
           keyExtractor={item => item.key}
         />
-
-        <TouchableOpacity style={styles.button} onPress={this.overlay}>
-          <Text style={styles.buttonText}>AddPost</Text>
-        </TouchableOpacity>
+        <View style={styles.footer}>
+          <TouchableOpacity style={styles.button} onPress={this.overlay}>
+            <Text style={styles.buttonText}>AddPost</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.button} onPress={this.myPost}>
+            <Text style={styles.buttonText}>MyPost</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     );
   }
@@ -137,30 +146,36 @@ const styles = StyleSheet.create({
     backgroundColor: "white"
   },
   button: {
-    width: 300,
-    height: 50,
+    width: 150,
+    height: 40,
     backgroundColor: "rgba(13,71,161,0.9)",
     borderRadius: 25,
-    marginTop: 20
+    marginTop: 17,
+    marginBottom: 4
+  },
+  footer: {
+    flexDirection: "row"
   },
   buttonText: {
-    fontSize: 18,
+    fontSize: 15,
     color: "#fff",
     fontWeight: "300",
-    paddingTop: 10,
+    paddingTop: 7,
     alignSelf: "center"
   },
   slide: {
     flexDirection: "row"
   },
   card: {
-    width: Dimensions.get("window").width - 60
+    width: Dimensions.get("window").width - 60,
+    borderColor: "#bcc2e0",
+    elevation: 1
   },
   contact: {
     justifyContent: "center",
     alignSelf: "center",
-    backgroundColor: "rgba(13,71,161,0.8)",
-    color: "#fff",
+    backgroundColor: "#bcc2e0",
+    color: "#000",
     paddingHorizontal: 10,
     paddingVertical: 5,
     borderRadius: 12
